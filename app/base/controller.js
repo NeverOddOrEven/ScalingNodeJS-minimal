@@ -1,6 +1,11 @@
-var monitor = require('../../management/cluster');
+var monitor = require('../../management/cluster'),
+  amqpManager = require('../../management/amqp');
 
 module.exports = function(app) {
+  (function() {
+    amqpManager.addConsumer({consumerCallback: listeningForMessages});
+  })();
+  
   app.get('/', function(req, res, next) {
     var processes = monitor.getProcesses();
     var port = monitor.getPort();
@@ -19,6 +24,17 @@ module.exports = function(app) {
     console.log(req.query.sessionValue);
     req.session.sessionValue = req.query.sessionValue;
       
+    res.redirect('/');
+  });
+
+  function listeningForMessages(payload) {
+    console.log(payload);
+  }
+  
+  app.get('/sendmessage', function(req, res, next) {
+    var messageToSend = req.query.message;
+    amqpManager.sendMessage({messageObject: messageToSend});
+    
     res.redirect('/');
   });
 };

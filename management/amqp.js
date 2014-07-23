@@ -1,6 +1,6 @@
 var amqplib = require('amqplib');
 
-module.exports = function(amqpServerPath) {
+function AmqpManager() {
     var outboundMessages = [];
     var commObject = {
         serverPath: null,
@@ -13,10 +13,9 @@ module.exports = function(amqpServerPath) {
         inboundQueue: 'tutorial.inbound_' + process.pid
     };
     
-    /* "CONSTRUCTOR" */
-    (function(amqpServerPath) {
+    function initialize(amqpServerPath) {
         commObject.serverPath = amqpServerPath;
-    })(amqpServerPath);
+    }
     
     function closeConnection() {
         console.info(commObject.channel);
@@ -59,10 +58,10 @@ module.exports = function(amqpServerPath) {
             commObject.connection.createChannel()
                 .then(function(ch) {
                     commObject.channel = ch;
-                    cb()
+                    cb();
                 }, console.error)
                 .then(null, console.error);
-        };
+        }
 
         if (commObject.connection !== null) {
             createChannelCb();
@@ -88,7 +87,7 @@ module.exports = function(amqpServerPath) {
                                        commObject.routingPattern, 
                                        new Buffer(JSON.stringify(payload.messageObject)));
             cb();
-        };
+        }
 
         if (commObject.channel !== null) {
             sendMessageCb();
@@ -153,8 +152,10 @@ module.exports = function(amqpServerPath) {
     }
 
     return {
-        sendMessage: asyncSendMessage,   /* Param @payload: { queue: '', messageObject: '' } */
-        addConsumer: addConsumer,   /* Param @payload: { queue: '', consumerCallback: function() {} } */
-        state: commObject
-    }
-};
+        sendMessage: asyncSendMessage,   /* Param @payload: { messageObject: '' } */
+        addConsumer: addConsumer,   /* Param @payload: { consumerCallback: function() {} } */
+        initialize: initialize
+    };
+}
+
+module.exports = exports = new AmqpManager();

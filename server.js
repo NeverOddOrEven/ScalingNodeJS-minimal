@@ -1,14 +1,18 @@
 var settings = require('./config/settings'),
   commandLineParser = require('./config/utilities/commandLineParser'),
-  amqpManager = require('./management/amqp')(settings.amqpPath),
+  amqpManager = require('./management/amqp'),
   cluster = require('cluster'),
   os = require('os'),
   mongoose = require('mongoose'),
   monitor = require('./management/cluster');
 
 var dbHandle = mongoose.connect(settings.dbPath);
-var  app = require('./config/express')(dbHandle),
-  modules = require('./app/settings')(app);
+  app = require('./config/express')(dbHandle);
+
+// Must come before modules - otherwise controllers will not initialize with amqp
+amqpManager.initialize(settings.amqpPath);
+
+var modules = require('./app/settings')(app);
 
 if (cluster.isMaster) {
   var commandLineArguments = commandLineParser.parse();

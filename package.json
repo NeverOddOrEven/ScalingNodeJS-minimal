@@ -7,6 +7,9 @@
     "node":"0.10.x",
     "npm":"1.4.x"
   },
+  "scripts": {
+    "postinstall":"bower install --config.interactive=false"
+  },
   "dependencies":{
     "express":"~4.4.0",
     "body-parser":"~1.4.0",

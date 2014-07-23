@@ -14,7 +14,7 @@ Usage branch #1-3:
 - node server
 
 Branch #4: (you can use a port number to run multiple instances to see that each server receives all messages)
-- node server [-p <port number>]
+- node server [-p #####]
 
 
 There is, or will be, a follow-up that uses meanjs to demonstrate more advanced usage.

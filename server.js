@@ -27,6 +27,9 @@ if (cluster.isMaster) {
     })(key);
   }
 
+  cluster.on('exit', function(worker, code, signal) {
+    console.info('Worker ' + worker.process.pid + ' died');
+  });
 } else {
   console.log('Listening on port: ' + appConfig.port);
   app.listen(appConfig.port);

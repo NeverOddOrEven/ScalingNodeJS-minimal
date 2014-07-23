@@ -26,11 +26,12 @@
             <h1>Scaling NodeJS</h1>
         </div>
         <div id="primary-content">
+            <p>Served from process: {{info.pid}}</p>
+            <p>Served on port: {{info.port}}</p>
             <div class="servers">
-            {% for server in servers %}
+            {% for pid in info.processes %}
                 <ol>
-                    <li>Server ID:&nbsp;{{server.pid}}</li>
-                    <li>Server Cores:&nbsp;{{server.cores}}</li>
+                    <li>Server on Process:&nbsp;{{pid}}</li>
                 </ol>
             {% endfor %}
             </div>

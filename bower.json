@@ -1,0 +1,9 @@
+{
+  "name":"ScalingNodeJS",
+  "version":"0.0.1",
+  "description":"Show the fundamental steps to scaling a NodeJS app cleanly",
+  "dependencies":{
+    "jquery":"~2.1.0",
+    "bootstrap":"~3.2.0"
+  }
+}

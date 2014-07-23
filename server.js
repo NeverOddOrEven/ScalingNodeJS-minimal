@@ -1,9 +1,12 @@
-var appConfig = require('./config/settings'),
+var settings = require('./config/settings'),
   cluster = require('cluster'),
   os = require('os'),
-  app = require('./config/express')(),
-  modules = require('./app/settings')(app),
+  mongoose = require('mongoose'),
   monitor = require('./management/cluster');
+
+var dbHandle = mongoose.connect(settings.dbPath);
+var  app = require('./config/express')(dbHandle),
+  modules = require('./app/settings')(app);
 
 if (cluster.isMaster) {
   var numberOfCores = os.cpus().length;
@@ -22,14 +25,14 @@ if (cluster.isMaster) {
     (function (i) {
       var process = cluster.workers[i];
       process.on('online', function() {
-        process.send({type: 'monitor', port: appConfig.port, processes: processes});
+        process.send({type: 'monitor', port: settings.port, processes: processes});
       });
     })(key);
   }
 
 } else {
-  console.log('Listening on port: ' + appConfig.port);
-  app.listen(appConfig.port);
+  console.log('Listening on port: ' + settings.port);
+  app.listen(settings.port);
 
   cluster.worker.on('message', function(message) {
     if (message.type === 'monitor') {

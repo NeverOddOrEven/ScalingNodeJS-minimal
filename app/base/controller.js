@@ -9,8 +9,16 @@ module.exports = function(app) {
       info: {
         pid: pid,
         port: port,
-        processes: processes
+        processes: processes,
+        sessionValue: req.session.sessionValue
       }
     });
+  });
+    
+  app.get('/setsession', function(req, res, next) {
+    console.log(req.query.sessionValue);
+    req.session.sessionValue = req.query.sessionValue;
+      
+    res.redirect('/');
   });
 };

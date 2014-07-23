@@ -28,13 +28,12 @@
         <div id="primary-content">
             <p>Served from process: {{info.pid}}</p>
             <p>Served on port: {{info.port}}</p>
-            <div class="servers">
+            <ol class="servers">
             {% for pid in info.processes %}
-                <ol>
-                    <li>Server on Process:&nbsp;{{pid}}</li>
-                </ol>
+              <li>Server on Process:&nbsp;{{pid}}</li>
             {% endfor %}
-            </div>
+            </ol>
+            <p>Session Value: {{info.sessionValue}}</p>
         </div>
         <div id="footer">
         </div>

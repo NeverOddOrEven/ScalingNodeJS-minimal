@@ -3,9 +3,14 @@ var express = require('express'),
   http = require('http'),
   path = require('path'),
   bodyParser = require('body-parser'),
+  session = require('express-session'),
+  cookieParser = require('cookie-parser'),
+  mongoStore = require('connect-mongo')({
+    session: session
+  }),
   settings = require('./settings');
 
-module.exports = function() {
+module.exports = function(dbHandle) {
   var app = express();
 
   app.locals.title = settings.app.title;
@@ -26,6 +31,18 @@ module.exports = function() {
   app.set('views', './app/base');
   app.engine('html', consolidate[settings.templateEngine]);
   app.use(bodyParser.urlencoded({extended: true}));
+
+  app.use(cookieParser());
+  app.use(session({
+      secret: settings.sessionSecret,
+      store: new mongoStore({
+        db: dbHandle.connection.db,
+        collection: settings.sessionCollection
+      }),
+      saveUninitialized: true,
+      resave: true
+    })
+  );
 
   return app;
 };

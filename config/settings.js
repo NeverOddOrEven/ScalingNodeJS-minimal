@@ -8,5 +8,6 @@ module.exports = {
   templateEngine: 'swig',
   sessionSecret: 'ABC123___!',
   sessionCollection: 'sessions',
-  dbPath: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://localhost/demo'
+  dbPath: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://localhost/demo',
+  amqpPath: process.env.RabbitMQ_URL || 'amqp://localhost'
 };

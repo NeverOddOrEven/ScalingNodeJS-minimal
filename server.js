@@ -1,4 +1,6 @@
 var settings = require('./config/settings'),
+  commandLineParser = require('./config/utilities/commandLineParser'),
+  amqpManager = require('./management/amqp')(settings.amqpPath),
   cluster = require('cluster'),
   os = require('os'),
   mongoose = require('mongoose'),
@@ -9,6 +11,8 @@ var  app = require('./config/express')(dbHandle),
   modules = require('./app/settings')(app);
 
 if (cluster.isMaster) {
+  var commandLineArguments = commandLineParser.parse();
+  var port = commandLineArguments.port || settings.port || 3000;
   var numberOfCores = os.cpus().length;
   for (var i = 0; i < numberOfCores; ++i) {
     cluster.fork();
@@ -25,24 +29,21 @@ if (cluster.isMaster) {
     (function (i) {
       var process = cluster.workers[i];
       process.on('online', function() {
-        process.send({type: 'monitor', port: settings.port, processes: processes});
+        process.send({type: 'monitor', port: port, processes: processes});
       });
     })(key);
   }
-
 } else {
-  console.log('Listening on port: ' + settings.port);
-  app.listen(settings.port);
-
   cluster.worker.on('message', function(message) {
     if (message.type === 'monitor') {
+      console.log('Listening on port: ' + message.port);
+      app.listen(message.port);
       monitor.setPort(message.port);
       monitor.setProcess(cluster.worker.process.pid);
       monitor.setProcesses(message.processes);
     }
   });
 }
-
 
 exports = module.exports = app;
 

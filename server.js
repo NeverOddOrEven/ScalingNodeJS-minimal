@@ -33,6 +33,9 @@ if (cluster.isMaster) {
       });
     })(key);
   }
+  cluster.on('exit', function(worker, code, signal) {
+    console.info('Worker ' + worker.process.pid + ' died');
+  });
 } else {
   cluster.worker.on('message', function(message) {
     if (message.type === 'monitor') {

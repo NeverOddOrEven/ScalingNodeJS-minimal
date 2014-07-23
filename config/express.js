@@ -23,7 +23,7 @@ module.exports = function() {
 
   app.set('showStackError', true);
 
-  app.set('views', './app/modules');
+  app.set('views', './app/base');
   app.engine('html', consolidate[settings.templateEngine]);
   app.use(bodyParser.urlencoded({extended: true}));
 

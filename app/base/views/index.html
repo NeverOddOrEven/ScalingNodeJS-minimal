@@ -1,0 +1,45 @@
+<!DOCTYPE html> 
+<html>
+<head>
+    <title>Scaling NodeJS</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/public/css/reset.css" />
+    <link rel="stylesheet" href="/public/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/public/lib/bootstrap/dist/css/bootstrap-theme.min.css" />
+	
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <link rel="stylesheet" href="/public/css/common.css" />
+    <link rel="stylesheet" href="/public/css/index.css" />
+</head>
+
+<body>
+    <div id="content">
+        <div id="header">
+            <h1>Scaling NodeJS</h1>
+        </div>
+        <div id="primary-content">
+            <div class="servers">
+            {% for server in servers %}
+                <ol>
+                    <li>Server ID:&nbsp;{{server.pid}}</li>
+                    <li>Server Cores:&nbsp;{{server.cores}}</li>
+                </ol>
+            {% endfor %}
+            </div>
+        </div>
+        <div id="footer">
+        </div>
+    </div>
+    <script src="/public/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/public/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/public/js/index.js"></script>
+</body>
+</html>
